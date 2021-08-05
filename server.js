@@ -46,14 +46,14 @@ app.get('/api/hello', function(req, res) {
 
 app.post('/api/shorturl', urlAuth, (req, res) => {
   
-  urlModel.findOne({orignal_link: req.surl}, async (err, data) => {
+  urlModel.findOne({orignal_link: req.furl}, async (err, data) => {
     if (data == null){
-      data = await urlModel.create({orignal_link: req.surl, short_link: counter.toString()})
+      data = await urlModel.create({orignal_link: req.furl, short_link: counter.toString()})
       console.log("creating", data)
     }
     counter++;
     console.log(counter)
-    res.send(data)
+    res.send({"orignal_url": data.orignal_link, "short_url": data.short_link})
   }) 
   
   })
@@ -90,6 +90,7 @@ function urlAuth(req, res, next){
       }
       else{
         req.surl = regurlnb;
+        req.furl = url.replace(TRAIL_SLASH, '')
         next()
       }
   
