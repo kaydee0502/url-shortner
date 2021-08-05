@@ -58,6 +58,20 @@ app.post('/api/shorturl', urlAuth, (req, res) => {
   
   })
 
+app.get("/api/shorturl/:id", (req,res) => {
+  let id = req.params.id
+  
+  urlModel.findOne({short_link: id}, (err, data) => {
+    console.log(id,err,data)
+    if (data == null) {
+      res.send({"error":"No short URL found for the given input"})
+    }
+    else{
+    res.send(data)
+    }
+  })
+})
+
 
 
 function urlAuth(req, res, next){
